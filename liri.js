@@ -1,7 +1,7 @@
 // add code to read and set any environment variables with the dotenv package:
 require("dotenv").config();
 // add the code required to import the keys.js file and store it in a variable
-// var keys = require("./keys.js");
+var keys = require("./keys.js");
 // should then be able to access your keys information like so..
 var Spotify = require("node-spotify-api");
 var axios = require("axios");
@@ -10,32 +10,34 @@ var fs = require("fs");
 
 
 // Make it so liri.js can take in one of the following commands:
-// console.log(process.argv);
 // Takes an artist and searches the Bands in Town 
 // Artist API for an artist and render information
 
-var command = process.argv[2];
+var command = process.argv[2]
 var artist = process.argv[3];
-console.log(command);
 
 var concertThis = function(artist) {
     var queryUrl = "https://rest.bandsintown.com/artists/" + artist.replace(" ", "+") + "/events?app_id=codingbootcamp";
-//var Name of the venue
-//var Venue location
-//var Date of the Event (use moment to format this as "MM/DD/YYYY")
 
-    request(queryUrl, function(err, response) {
+// Name of the venue
+// Venue location
+// Date of the Event (use moment to format this as "MM/DD/YYYY")
 
-    })
-}
+axios.get(queryUrl)
+  .then(function (response) {
+    console.log('venue is', response.data[0].venue);
+    console.log('date is', response.data[0].datetime);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+} 
+
 if (command === 'concert-this') {
-    console.log(concertThis);
-    
+    concertThis(artist);   
 }
-if (artist === '') {
-    console.log(artist);
-    
-}
+
 
 
 
