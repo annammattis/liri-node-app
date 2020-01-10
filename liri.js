@@ -13,7 +13,7 @@ var fs = require("fs");
 // Takes an artist and searches the Bands in Town 
 // Artist API for an artist and render information
 
-var command = process.argv[2]
+var command = process.argv[2];
 var artist = process.argv[3];
 
 var concertThis = function(artist) {
@@ -39,25 +39,40 @@ if (command === 'concert-this') {
 }
 
 
-
+console.log(JSON.stringify(data, null, 2)); 
 
 // ------------------------------------------------------------------------
 // This will take a song, search spotify and return information
-// var spotifyThisSong = function(song) {
-//     if (!song) {
-//         //default is I Want it That Way by Backstreet Boys
-//         song = "I Want it That Way"
-//     }
-// }
+var command = process.argv[2];
+var song = process.argv[3];
+var spotifyThisSong = function(song) {
+    if (!song) {
+        //default is I Want it That Way by Backstreet Boys
+        song = "I Want it That Way"
+    }
+}
+var spotify = new Spotify(keys.spotify);
+// Artist(s)
+// The song's name
+// A preview link of the song from Spotify
+// The album that the song is from
+spotify.search({ type: 'track', query: 'All the Small Things' })
+  .then(function(response) {
+    console.log('Artist is', response.items[0].artists.name);
+    console.log('Song is', response.items[0].name);
+    console.log('Link is', response.items[0].href);
+    console.log('Album is', response.items[0].album.name);
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
 
-// // var spotify = new Spotify(keys.spotify);
-// spotify.search({ type: 'track', query: song, limit: 1}, function(err, data) {
-//     if (err) {
-//       return console.log('Error occurred: ' + err);
-//     }
+
+    if (command === 'spotify-this-song') {
+      spotifyThisSong(song);
+    }
    
-//   console.log(JSON.stringify(data, null, 2)); 
-//   });
+  console.log(JSON.stringify(data, null, 2)); 
 
 
 //   ------------------------------------------------------------------------
