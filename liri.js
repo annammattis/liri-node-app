@@ -27,9 +27,11 @@ axios.get(queryUrl)
   .then(function (response) {
     console.log('venue is', response.data[0].venue);
     console.log('date is', response.data[0].datetime);
+    console.log(JSON.stringify(response, null, 2)); 
   })
-  .catch(function (error) {
-    console.log(error);
+  .catch(function(err) {
+    console.log(err);
+
   });
 
 } 
@@ -39,7 +41,7 @@ if (command === 'concert-this') {
 }
 
 
-console.log(JSON.stringify(data, null, 2)); 
+
 
 // ------------------------------------------------------------------------
 // This will take a song, search spotify and return information
@@ -62,6 +64,7 @@ spotify.search({ type: 'track', query: 'All the Small Things' })
     console.log('Song is', response.items[0].name);
     console.log('Link is', response.items[0].href);
     console.log('Album is', response.items[0].album.name);
+    console.log(JSON.stringify(response, null, 2)); 
   })
   .catch(function(err) {
     console.log(err);
@@ -72,26 +75,46 @@ spotify.search({ type: 'track', query: 'All the Small Things' })
       spotifyThisSong(song);
     }
    
-  console.log(JSON.stringify(data, null, 2)); 
+  
 
 
 //   ------------------------------------------------------------------------
 // This will take a movie, search IMDb and return information
-// var movieThis = function(movie) {
-//     //default will be Mr. Nobody
-//     if (!movie) {
-//         movie = "Mr. Nobody"
-//     }
+var command = process.argv[2];
+var movie = process.argv[3];
+var movieThis = function(movie) {
+    //default will be Mr. Nobody
+    if (!movie) {
+        movie = "Mr. Nobody"
+    }
 
-//     var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
-// }
+    var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
+}
 
-// axios.get("http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=trilogy").then(
-//   function(response) {
-//     // Then we print out the imdbRating
-//     console.log("The movie's rating is: " + response.data.imdbRating);
-//   }
-// );
+axios.get("http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=trilogy")
+  .then(function(response) {
+    // Then we print out the imdbRating
+    // * Title of the movie.
+    // * Year the movie came out.
+    // * IMDB Rating of the movie.
+    // * Rotten Tomatoes Rating of the movie.
+    // * Country where the movie was produced.
+    // * Language of the movie.
+    // * Plot of the movie.
+    // * Actors in the movie.
+  
+    console.log("The movie's rating is: " + response.data.imdbRating);
+    console.log(JSON.stringify(response, null, 2));
+  })
+  .catch(function(err) {
+    console.log(err);
+  })
+;
+
+if (command === 'movie-this') {
+  movieThis(movie);
+}
+
 
 
 
