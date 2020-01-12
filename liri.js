@@ -47,79 +47,83 @@ if (command === 'concert-this') {
 // This will take a song, search spotify and return information
 var command = process.argv[2];
 var song = process.argv[3];
-var spotifyThisSong = function(song) {
-    if (!song) {
-        //default is I Want it That Way by Backstreet Boys
-        song = "I Want it That Way"
-    }
+var spotifyThisSong = function (song) {
+  if (!song) {
+    //default is I Want it That Way by Backstreet Boys
+    song = "I Want it That Way"
+  }
+
+  var spotify = new Spotify(keys.spotify);
+  // Artist(s)
+  // The song's name
+  // A preview link of the song from Spotify
+  // The album that the song is from
+  spotify.search({ type: 'track', query: song })
+    .then(function (response) {
+      console.log('Artist is', response.tracks.items[0].artists[0].name);
+      console.log('Song is', response.tracks.items[0].name);
+      console.log('Link is', response.tracks.items[0].href);
+      console.log('Album is', response.tracks.items[0].album.name);
+      // console.log(JSON.stringify(response, null, 2)); 
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
 }
-var spotify = new Spotify(keys.spotify);
-// Artist(s)
-// The song's name
-// A preview link of the song from Spotify
-// The album that the song is from
-spotify.search({ type: 'track', query: 'All the Small Things' })
-  .then(function(response) {
-    console.log('Artist is', response.items[0].artists.name);
-    console.log('Song is', response.items[0].name);
-    console.log('Link is', response.items[0].href);
-    console.log('Album is', response.items[0].album.name);
-    console.log(JSON.stringify(response, null, 2)); 
-  })
-  .catch(function(err) {
-    console.log(err);
-  });
+
+if (command === 'spotify-this-song') {
+  spotifyThisSong(song);
+}
 
 
-    if (command === 'spotify-this-song') {
-      spotifyThisSong(song);
-    }
-   
-  
 
 
 //   ------------------------------------------------------------------------
 // This will take a movie, search IMDb and return information
 var command = process.argv[2];
 var movie = process.argv[3];
-var movieThis = function(movie) {
-    //default will be Mr. Nobody
-    if (!movie) {
-        movie = "Mr. Nobody"
-    }
+var movieThis = function (movie) {
+  //default will be Mr. Nobody
+  if (!movie) {
+    movie = "Mr. Nobody"
+  }
 
-    var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
+  var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
+
+  axios.get(queryUrl)
+    .then(function (response) {
+      var results = response.data;
+      // Then we print out the imdbRating
+      console.log(results.Title);
+      console.log(results.Year);
+      console.log(results.imdbRating);
+      console.log(results.Country);
+      console.log(results.Language);
+      console.log(results.Plot);
+      console.log(results.Actors);
+      // * Title of the movie.
+      // * Year the movie came out.
+      // * IMDB Rating of the movie.
+      // * Country where the movie was produced.
+      // * Language of the movie.
+      // * Plot of the movie.
+      // * Actors in the movie.
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+
 }
-
-axios.get("http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=trilogy")
-  .then(function(response) {
-    // Then we print out the imdbRating
-    // * Title of the movie.
-    // * Year the movie came out.
-    // * IMDB Rating of the movie.
-    // * Rotten Tomatoes Rating of the movie.
-    // * Country where the movie was produced.
-    // * Language of the movie.
-    // * Plot of the movie.
-    // * Actors in the movie.
-  
-    console.log("The movie's rating is: " + response.data.imdbRating);
-    console.log(JSON.stringify(response, null, 2));
-  })
-  .catch(function(err) {
-    console.log(err);
-  })
-;
 
 if (command === 'movie-this') {
   movieThis(movie);
 }
 
 
-
+//---------------------------------------------------------------------------------
 
 var doWhatItSays = function() {
-  fs.readFile("log.txt", "utf8", function(error, data) {
+  fs.readFile("random.txt", "utf8", function(error, data) {
     // If the code experiences any errors it will log the error to the console.
     if (error) {
       return console.log(error);
@@ -128,8 +132,54 @@ var doWhatItSays = function() {
     var dataArr = data.split(",");
       // We will then print the contents of data
       console.log(data);
+
+    for (var i = 0; i < dataArr.length - 1; i += 2) {
+      var app = dataArr[i];
+      var input = dataArr[i + 1];
+      console.log(app);
+      console.log(input);
+      switch (app) {
+        case 'concert-this':
+          concertThis(input);
+          break;
+        case 'spotify-this-song':
+          spotifyThisSong(input);
+          break;
+        case 'movie-this':
+          movieThis(input);
+          break;
+        default:
+        console.log("Error");
+      }
+      }
       //Loop through the newly created output array
-      for (var i = 0; i < output.length; i++); {
-          // We will then re-display the content as an array for later use.
-          console.log(dataArr[i]);
+      // for (var i = 0; i < output.length; i++); {
+      //     // We will then re-display the content as an array for later use.
+      //     console.log(dataArr[i]);
+      // };
   });
+};
+
+if (command === 'do-what-it-says') {
+  doWhatItSays();
+}
+
+
+
+// It will then print "Inception, Die Hard" in the file
+var append = function() {
+  var app = process.argv[2];
+  var input = process.argv[3];
+  var entry = app + "," + input + "\n\r";
+  fs.appendFile("log.txt", entry, "utf8", function(err) {
+    // If the code experiences any errors it will log the error to the console.
+    if (err) {
+      return console.log(err);
+    }
+    // Otherwise, it will print: "movies.txt was updated!"
+    console.log(entry);
+  });
+}
+if (command) {
+  append();
+}
