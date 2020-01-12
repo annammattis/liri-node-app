@@ -16,28 +16,27 @@ var fs = require("fs");
 var command = process.argv[2];
 var artist = process.argv[3];
 
-var concertThis = function(artist) {
-    var queryUrl = "https://rest.bandsintown.com/artists/" + artist.replace(" ", "+") + "/events?app_id=codingbootcamp";
+var concertThis = function (artist) {
+  var queryUrl = "https://rest.bandsintown.com/artists/" + artist.replace(" ", "+") + "/events?app_id=codingbootcamp";
 
-// Name of the venue
-// Venue location
-// Date of the Event (use moment to format this as "MM/DD/YYYY")
 
-axios.get(queryUrl)
-  .then(function (response) {
-    console.log('venue is', response.data[0].venue);
-    console.log('date is', response.data[0].datetime);
-    console.log(JSON.stringify(response, null, 2)); 
-  })
-  .catch(function(err) {
-    console.log(err);
+  axios.get(queryUrl)
+    .then(function (response) {
+      // Name of the venue
+      console.log('venue is', response.data[0].venue);
+      // Date of the Event
+      console.log('date is', response.data[0].datetime);
+      console.log(JSON.stringify(response, null, 2));
+    })
+    .catch(function (err) {
+      console.log(err);
 
-  });
+    });
 
-} 
+}
 
 if (command === 'concert-this') {
-    concertThis(artist);   
+  concertThis(artist);
 }
 
 
@@ -54,15 +53,16 @@ var spotifyThisSong = function (song) {
   }
 
   var spotify = new Spotify(keys.spotify);
-  // Artist(s)
-  // The song's name
-  // A preview link of the song from Spotify
-  // The album that the song is from
+
   spotify.search({ type: 'track', query: song })
     .then(function (response) {
+      // Artist(s)
       console.log('Artist is', response.tracks.items[0].artists[0].name);
+      // The song's name
       console.log('Song is', response.tracks.items[0].name);
+      // A preview link of the song from Spotify
       console.log('Link is', response.tracks.items[0].href);
+      // The album that the song is from
       console.log('Album is', response.tracks.items[0].album.name);
       // console.log(JSON.stringify(response, null, 2)); 
     })
@@ -94,25 +94,26 @@ var movieThis = function (movie) {
     .then(function (response) {
       var results = response.data;
       // Then we print out the imdbRating
-      console.log(results.Title);
-      console.log(results.Year);
-      console.log(results.imdbRating);
-      console.log(results.Country);
-      console.log(results.Language);
-      console.log(results.Plot);
-      console.log(results.Actors);
       // * Title of the movie.
+      console.log('Title is', results.Title);
       // * Year the movie came out.
+      console.log('Year is', results.Year);
       // * IMDB Rating of the movie.
+      console.log('Rating is', results.imdbRating);
       // * Country where the movie was produced.
+      console.log('Country is', results.Country);
       // * Language of the movie.
+      console.log('Language is', results.Language);
       // * Plot of the movie.
+      console.log('Plot is', results.Plot);
       // * Actors in the movie.
+      console.log('Actors are', results.Actors);
+
+
     })
     .catch(function (err) {
       console.log(err);
     });
-
 }
 
 if (command === 'movie-this') {
@@ -122,16 +123,16 @@ if (command === 'movie-this') {
 
 //---------------------------------------------------------------------------------
 
-var doWhatItSays = function() {
-  fs.readFile("random.txt", "utf8", function(error, data) {
+var doWhatItSays = function () {
+  fs.readFile("random.txt", "utf8", function (error, data) {
     // If the code experiences any errors it will log the error to the console.
     if (error) {
       return console.log(error);
-    }  
+    }
     // Then split it by commas (to make it more readable)
     var dataArr = data.split(",");
-      // We will then print the contents of data
-      console.log(data);
+    // We will then print the contents of data
+    console.log(data);
 
     for (var i = 0; i < dataArr.length - 1; i += 2) {
       var app = dataArr[i];
@@ -149,14 +150,14 @@ var doWhatItSays = function() {
           movieThis(input);
           break;
         default:
-        console.log("Error");
+          console.log("Error");
       }
-      }
-      //Loop through the newly created output array
-      // for (var i = 0; i < output.length; i++); {
-      //     // We will then re-display the content as an array for later use.
-      //     console.log(dataArr[i]);
-      // };
+    }
+    //Loop through the newly created output array
+    // for (var i = 0; i < output.length; i++); {
+    //     // We will then re-display the content as an array for later use.
+    //     console.log(dataArr[i]);
+    // };
   });
 };
 
@@ -167,11 +168,11 @@ if (command === 'do-what-it-says') {
 
 
 // It will then print "Inception, Die Hard" in the file
-var append = function() {
+var append = function () {
   var app = process.argv[2];
   var input = process.argv[3];
   var entry = app + "," + input + "\n\r";
-  fs.appendFile("log.txt", entry, "utf8", function(err) {
+  fs.appendFile("log.txt", entry, "utf8", function (err) {
     // If the code experiences any errors it will log the error to the console.
     if (err) {
       return console.log(err);
