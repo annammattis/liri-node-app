@@ -5,4 +5,9 @@ spotify-this-song,Landslide
 concert-this,Taylor Swift
 movie-this,Pretty in Pink
 movie-this,Pretty in Pink
+spotify-this-song,Juicy
+spotify-this-song,im
+spotify-this-song,big ole freak
+movie-this,The godfather
+concert-this,Alec Monopoly
 
