@@ -22,8 +22,6 @@ LIRI is a Language Interpretation and Recognition Interface. LIRI will be a comm
 * ###### Give start-to-finish instructions on how to run the app
     - When in the terminal, type in node, the liri file and the command you are wishing to target, and then the value of what you are looking to search
 
-* ###### Include screenshots, gifs or videos of the app functioning
-
 * ###### Contain a link to a deployed version of the app
     - https://annammattis.github.io/liri-node-app/
 
